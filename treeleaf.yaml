@@ -1,0 +1,258 @@
+swagger: '2.0'
+info:
+  description: "This is Treeleaf's assessment API collection."
+  version: "0.0.1"
+  title: "Treeleaf"
+  contact:
+    email: "rikeshmandal26@gmail.com"
+tags:
+- name: "Treeleaf"
+  description: "Treeleaf assessment APIs"
+schemes:
+- "https"
+- "http"
+
+paths:
+  /api/v1/blog/blogs:
+    get:
+      summary: "List all available blogs"
+      description: "Returns blog list"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful. List the blogs."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Blogs"
+        500:
+          description: "Internal server error"
+          
+
+  /api/v1/blog/{id}:
+    get:
+      summary: "View blogs"
+      description: "View specific blog by providing blog ID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of blog to return"
+        required: true
+        type: "integer"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful. Returns blog associated with blog ID."
+          schema:
+            items:
+              $ref: "#/definitions/Blogs"
+        500:
+          description: "Internal server error"
+    
+    delete:
+      summary: "Delete Blog"
+      description: "By providing blog id, delete that specific blog."
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of blog to delete"
+        required: true
+        type: "integer"
+      produces:
+      - "text/plain"
+      responses:
+        200:
+          description: "Blog Deleted. Id: {id}"
+        500:
+          description: "Internal server error"
+  
+  /api/v1/blog/addBlog:
+    post:
+      summary: "Add blog"
+      description: "This API adds new blogs"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      
+          
+      parameters:
+      - name: "title"
+        in: "body"
+        description: "Blog Model"
+        required: true
+        schema: 
+          items:
+              $ref: "#/definitions/PostBlogs"
+      
+      
+      responses:
+        200:
+          description: "Successful. Returns blog model with Id"
+          schema:
+            items:
+              $ref: "#/definitions/Blogs"
+        
+        500:
+          description: "Internal server error"
+  
+  /api/v1/blog/update:
+    post:
+      summary: "Update blog"
+      description: "This API updates existing blogs by providing blog Id with title and content"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+          
+      parameters:
+      - name: "update"
+        in: "body"
+        description: "Blog Model"
+        required: true
+        schema: 
+          items:
+              $ref: "#/definitions/Blogs"
+      responses:
+        200:
+          description: "Successful. Returns updated blog"
+          schema:
+            items:
+              $ref: "#/definitions/Blogs" 
+        500:
+          description: "Internal server error"
+  
+  /api/v1/auth/register:
+    post:
+      summary: "Register User"
+      description: "This API registers an user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+          
+      parameters:
+      - name: "register"
+        in: "body"
+        description: "Register Model"
+        required: true
+        schema: 
+          items:
+              $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "Successful. Returns JWT token"
+          schema:
+            items:
+              $ref: "#/definitions/Token" 
+        500:
+          description: "Internal server error"
+  
+  /api/v1/auth/authenticate:
+    post:
+      summary: "Authenticate User"
+      description: "This API authenticates an user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+          
+      parameters:
+      - name: "authenticate"
+        in: "body"
+        description: "Authenticate Model"
+        required: true
+        schema: 
+          items:
+              $ref: "#/definitions/Authentication"
+      responses:
+        200:
+          description: "Successful. Returns JWT token"
+          schema:
+            items:
+              $ref: "#/definitions/Token" 
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+    
+  /api/v1/auth/token-validation:
+    get:
+  
+      parameters:
+      - name: "validate"
+        type: "string"
+        in: "header"
+        required: true
+      summary: "Validate Token"
+      description: "This API validates token by passing token in Authorization header as type bearer"
+      produces:
+      - "text/plain"
+      responses:
+        200:
+          description: "This is a secure endpoint!"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"  
+
+
+
+
+          
+definitions:
+  Blogs:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      content:
+        type: "string"
+  
+  PostBlogs:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      content:
+        type: "string"
+  
+  User:
+    type: "object"
+    properties:
+      firstname:
+        type: "string"
+      lastname:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+        
+  Authentication:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  
+  Token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+
+
+      
+  
+        
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
+# Added by API Auto Mocking Plugin
+basePath: /localhost:8082
